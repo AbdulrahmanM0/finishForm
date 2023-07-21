@@ -1,24 +1,70 @@
-import { useFormik } from "formik";
+import * as yup from 'yup'; 
+
+import { ErrorMessage, Field, Form, Formik } from "formik";
 
 function App() {
-  const formik = useFormik({
-    initialValues:{
-      email:'',
-      password:''
-    },
-    onSubmit: values => {
-      console.log(values)
-    }
+
+  const validation = yup.object({
+    username: yup.string().required('req'),
+    country: yup.string().required('req'),
+    email: yup.string().required('req').email('em'),
+    // password: yup.string().required('req')
   })
 
+
+  const handleSubmit = (values) => {
+    console.log(values)
+   
+  }
+
+  const initialValues = {
+    username: '',
+    country: '',
+    email: '',
+    // password: ''
+  }
+
+  const handleChange = (event) => {
+    console.log(event)
+  }
+
+  
+    
   return (
     <div className="App">
+      <div> 
+    
+      </div>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validation} validateOnBlur={false} validateOnChange={false} >
+      
+          <Form> 
+            <div>
+              <ErrorMessage name='username' component='div'/>  
+              <ErrorMessage name='country' component='div'/>  
+              <ErrorMessage name='email' component='div'/>  
+              <ErrorMessage name='password' component='div'/>  
+            </div>    
+            <div>
 
-      <form onSubmit={formik.handleSubmit}>
-        <input type='text' name='email' value={formik.values.email} onChange={formik.handleChange}/>
-        <input type='text' name='password' value={formik.values.password} onChange={formik.handleChange}/>
-        <input type='submit' />
-      </form>
+              <Field type='text' name='username' />
+              
+            </div>
+            <div>
+              <Field as='select' name='country' onChange={(e)=>handleChange(e.target.value)}>
+                <option id='select' value=''>select country</option>
+                <option id='egypt' value='Egypt'>Egypt</option>
+                <option id='england' value='England'>England</option>
+                <option id='france' value='France'>France</option>
+              </Field>
+            </div>
+            <div>
+              <Field type='text' name='email' />
+            </div>
+
+            <button type="submit">submit</button>
+          </Form>
+      
+      </Formik>
 
     </div>
   );
